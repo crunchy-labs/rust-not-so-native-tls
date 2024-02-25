@@ -105,13 +105,24 @@ use std::io;
 use std::result;
 
 #[cfg(any(
-    not(any(target_os = "macos", target_os = "windows", target_os = "ios")),
+    not(any(
+        target_os = "macos",
+        target_os = "windows",
+        target_os = "ios",
+        target_os = "watchos",
+        target_os = "tvos"
+    )),
     feature = "use-openssl"
 ))]
 #[macro_use]
 extern crate log;
 #[cfg(all(
-    any(target_os = "macos", target_os = "ios"),
+    any(
+        target_os = "macos",
+        target_os = "ios",
+        target_os = "watchos",
+        target_os = "tvos"
+    ),
     not(feature = "use-openssl")
 ))]
 #[path = "imp/security_framework.rs"]
@@ -120,7 +131,13 @@ mod imp;
 #[path = "imp/schannel.rs"]
 mod imp;
 #[cfg(any(
-    not(any(target_os = "macos", target_os = "windows", target_os = "ios")),
+    not(any(
+        target_os = "macos",
+        target_os = "windows",
+        target_os = "ios",
+        target_os = "watchos",
+        target_os = "tvos"
+    )),
     feature = "use-openssl"
 ))]
 #[path = "imp/openssl.rs"]
