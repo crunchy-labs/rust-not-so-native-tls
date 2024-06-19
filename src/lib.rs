@@ -94,7 +94,6 @@
 //!     }
 //! }
 //! ```
-#![doc(html_root_url = "https://docs.rs/native-tls/0.2")]
 #![warn(missing_docs)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
@@ -104,42 +103,16 @@ use std::fmt;
 use std::io;
 use std::result;
 
-#[cfg(any(
-    not(any(
-        target_os = "macos",
-        target_os = "windows",
-        target_os = "ios",
-        target_os = "watchos",
-        target_os = "tvos"
-    )),
-    feature = "use-openssl"
-))]
+#[cfg(not(any(target_os = "windows", target_vendor = "apple",)))]
 #[macro_use]
 extern crate log;
-#[cfg(all(
-    any(
-        target_os = "macos",
-        target_os = "ios",
-        target_os = "watchos",
-        target_os = "tvos"
-    ),
-    not(feature = "use-openssl")
-))]
+#[cfg(all(target_vendor = "apple", not(feature = "use-openssl")))]
 #[path = "imp/security_framework.rs"]
 mod imp;
 #[cfg(all(target_os = "windows", not(feature = "use-openssl")))]
 #[path = "imp/schannel.rs"]
 mod imp;
-#[cfg(any(
-    not(any(
-        target_os = "macos",
-        target_os = "windows",
-        target_os = "ios",
-        target_os = "watchos",
-        target_os = "tvos"
-    )),
-    feature = "use-openssl"
-))]
+#[cfg(any(not(any(target_vendor = "apple", target_os = "windows",)), feature = "use-openssl"))]
 #[path = "imp/openssl.rs"]
 mod imp;
 
